@@ -1,0 +1,81 @@
+audit:
+  name: Setup audit
+  description: Check scanner freshness, overlap, and RSSI stability.
+calibrate_one_meter:
+  name: One-metre calibration
+  description: Recommend reference power from stable RSSI history.
+  fields:
+    device_id:
+      name: Bermuda device address
+      description: Optional local address used only to ask Bermuda for one device.
+      selector: {text: {}}
+    scanner:
+      name: Scanner
+      description: Optional scanner name or redacted label fragment.
+      selector: {text: {}}
+calibrate_distance:
+  name: Distance calibration
+  description: Calculate attenuation from a measured test beyond one metre.
+  fields:
+    device_id:
+      name: Bermuda device address
+      selector: {text: {}}
+    scanner:
+      name: Scanner
+      selector: {text: {}}
+    measured_distance:
+      name: Measured distance
+      required: true
+      selector: {number: {min: 1.01, max: 50, step: 0.01, unit_of_measurement: m}}
+    reference_power:
+      name: Reference power
+      required: true
+      selector: {number: {min: -120, max: -1, step: 0.1, unit_of_measurement: dBm}}
+balance_scanners:
+  name: Balance scanners
+  description: Recommend per-scanner RSSI offsets using one stationary device.
+  fields:
+    device_id:
+      name: Bermuda device address
+      selector: {text: {}}
+walk_test:
+  name: Walk test
+  description: Show nearest scanners and whether their signal margin is ambiguous.
+  fields:
+    device_id:
+      name: Bermuda device address
+      selector: {text: {}}
+    ambiguity_db:
+      name: Ambiguity threshold
+      default: 4
+      selector: {number: {min: 0, max: 30, step: 0.5, unit_of_measurement: dB}}
+explain_settings:
+  name: Explain settings
+  description: Explain current Bermuda settings in plain English.
+preview:
+  name: Preview settings
+  description: Validate and compare a settings object without changing Bermuda.
+  fields:
+    settings:
+      name: Settings
+      required: true
+      example: '{"ref_power": -59, "attenuation": 2.7}'
+      selector: {object: {}}
+apply:
+  name: Apply settings
+  description: Save a snapshot and apply reviewed Bermuda options.
+  fields:
+    settings:
+      name: Settings
+      required: true
+      selector: {object: {}}
+rollback:
+  name: Roll back
+  description: Restore the most recent Bermuda settings snapshot.
+ask_ai:
+  name: Ask AI
+  description: Send only a redacted audit to the selected Home Assistant conversation agent.
+  fields:
+    agent_id:
+      name: Conversation agent
+      selector: {conversation_agent: {}}

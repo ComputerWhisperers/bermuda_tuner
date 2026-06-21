@@ -1,0 +1,42 @@
+{
+  "title": "Bermuda Tuner",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Bermuda Tuner",
+        "description": "Bermuda Tuner runs deterministic audits and calibration calculations locally. AI is optional and receives only a redacted report through your selected Home Assistant conversation agent.",
+        "data": {
+          "ai_enabled": "Enable optional AI explanations",
+          "conversation_agent": "Conversation agent"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Bermuda Tuner is already configured.",
+      "bermuda_required": "Install and configure Bermuda before adding Bermuda Tuner."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {"title": "Bermuda tuning wizard", "menu_options": {"audit": "Setup audit", "one_meter": "One-metre calibration", "distance": "Distance calibration", "balance": "Scanner balancing", "walk_test": "Walk test", "explain": "Explain settings", "apply": "Preview and apply", "rollback": "Roll back", "ai": "AI options"}},
+      "result": {"title": "{title}", "description": "{result}"},
+      "audit": {"title": "Setup audit"},
+      "one_meter": {"title": "One-metre calibration", "description": "Place the beacon exactly one metre from the scanner and keep both still.", "data": {"device_address": "Bermuda device address", "scanner": "Scanner name or label"}},
+      "distance": {"title": "Distance calibration", "description": "Move the same beacon to a measured distance beyond one metre; 4-6 m is recommended.", "data": {"device_address": "Bermuda device address", "scanner": "Scanner name or label", "measured_distance": "Measured distance (m)", "reference_power": "Reference power from the one-metre test"}},
+      "balance": {"title": "Scanner balancing", "description": "Keep one beacon stationary where several scanners can hear it.", "data": {"device_address": "Bermuda device address"}},
+      "walk_test": {"title": "Walk test", "description": "Walk to a test point, pause, then submit to compare the strongest scanners.", "data": {"device_address": "Bermuda device address", "ambiguity_db": "Ambiguity threshold (dB)"}},
+      "explain": {"title": "Plain-English settings"},
+      "apply": {"title": "Preview settings", "description": "Enter only documented Bermuda tuning keys. Nothing changes until the next confirmation screen.", "data": {"settings": "Settings"}},
+      "confirm_apply": {"title": "Confirm settings", "description": "Review these changes. A rollback snapshot will be saved before applying: {result}", "data": {"confirm": "Apply these changes"}},
+      "rollback": {"title": "Roll back Bermuda settings", "description": "Restore the latest snapshot saved by Bermuda Tuner.", "data": {"confirm": "Restore the snapshot"}},
+      "ai": {
+        "title": "AI explanations",
+        "description": "Calculations always remain deterministic. When enabled, Ask AI sends only a redacted audit to the selected Home Assistant conversation agent. The tuner stores no AI transcript, but the provider's own privacy policy still applies.",
+        "data": {
+          "ai_enabled": "Enable AI explanations",
+          "conversation_agent": "Conversation agent"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "domain": "bermuda_tuner",
+  "name": "Bermuda Tuner",
+  "after_dependencies": ["bermuda", "conversation"],
+  "codeowners": ["@bditter"],
+  "config_flow": true,
+  "dependencies": ["conversation"],
+  "documentation": "https://github.com/ComputerWhisperers/bermuda_tuner",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/ComputerWhisperers/bermuda_tuner/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
