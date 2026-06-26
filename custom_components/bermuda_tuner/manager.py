@@ -8,7 +8,6 @@ import re
 from datetime import UTC, datetime
 from typing import Any
 
-from homeassistant.const import ServiceResponse
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
 
@@ -35,7 +34,7 @@ class TunerManager:
 
     async def dump(self, addresses: str = "") -> dict[str, Any]:
         """Request a redacted in-memory dump directly from Bermuda."""
-        result: ServiceResponse = await self.hass.services.async_call(
+        result: Any = await self.hass.services.async_call(
             BERMUDA_DOMAIN,
             "dump_devices",
             {"addresses": addresses, "configured_devices": not bool(addresses), "redact": True},

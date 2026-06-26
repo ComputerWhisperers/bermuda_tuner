@@ -18,7 +18,6 @@ from .analyzer import (
     walk_test,
 )
 from .const import BERMUDA_DOMAIN, CONF_AI_ENABLED, CONF_CONVERSATION_AGENT, DOMAIN
-from .manager import TunerManager
 
 
 def _conversation_agent_selector():
@@ -26,6 +25,13 @@ def _conversation_agent_selector():
     if hasattr(selector, "ConversationAgentSelector"):
         return selector.ConversationAgentSelector()
     return selector.TextSelector()
+
+
+def _manager(hass):
+    """Create the runtime manager without making config-flow import depend on it."""
+    from .manager import TunerManager
+
+    return TunerManager(hass)
 
 
 class BermudaTunerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -92,7 +98,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
         return self._result(self._result_title, self._result_text)
 
     async def async_step_audit(self, user_input=None):
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         return self._result("Setup audit", audit(await manager.dump()))
 
     async def async_step_one_meter(self, user_input=None):
@@ -106,7 +112,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
                     }
                 ),
             )
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         dump = await manager.dump(user_input["device_address"])
         advert = manager.select_adverts(dump, user_input["scanner"])[0]
         return self._result("One-metre calibration", calibrate_reference_power(advert))
@@ -128,7 +134,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
                     }
                 ),
             )
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         dump = await manager.dump(user_input["device_address"])
         advert = manager.select_adverts(dump, user_input["scanner"])[0]
         return self._result(
@@ -144,7 +150,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
                 step_id="balance",
                 data_schema=vol.Schema({vol.Optional("device_address", default=""): str}),
             )
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         dump = await manager.dump(user_input["device_address"])
         return self._result("Scanner balancing", balance_scanners(manager.select_adverts(dump)))
 
@@ -161,17 +167,17 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
                     }
                 ),
             )
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         dump = await manager.dump(user_input["device_address"])
         result = walk_test(manager.select_adverts(dump), user_input["ambiguity_db"])
         return self._result("Walk test", result)
 
     async def async_step_explain(self, user_input=None):
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         return self._result("Plain-English settings", explain_settings(manager.current_settings()))
 
     async def async_step_apply(self, user_input=None):
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         if user_input is None:
             return self.async_show_form(
                 step_id="apply",
@@ -194,7 +200,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
             return await self.async_step_apply()
         if not user_input["confirm"]:
             return await self.async_step_init()
-        manager = TunerManager(self.hass)
+        manager = _manager(self.hass)
         return self._result("Settings applied", await manager.apply(self._pending_patch or {}))
 
     async def async_step_rollback(self, user_input=None):
@@ -205,7 +211,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
             )
         if not user_input["confirm"]:
             return await self.async_step_init()
-        return self._result("Rollback complete", await TunerManager(self.hass).rollback())
+        return self._result("Rollback complete", await _manager(self.hass).rollback())
 
     async def async_step_ai(self, user_input=None):
         """Configure optional AI explanations."""

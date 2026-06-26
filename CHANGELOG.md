@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.2 - 2026-06-25
+
+- Fix config-flow loading by removing a bad `ServiceResponse` import from `homeassistant.const`.
+- Lazy-load runtime Bermuda manager code from options steps so Add Integration can always register the handler.
+
 ## v1.0.1 - 2026-06-25
 
 - Fix the HACS release archive layout so files install directly into `custom_components/bermuda_tuner`.
