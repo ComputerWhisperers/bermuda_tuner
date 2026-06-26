@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.4 - 2026-06-26
+
+- Rewrite setup and options text around beginner tasks instead of Bermuda internals.
+- Format wizard results as readable lines instead of raw Python-style dictionaries.
+- Add clearer next-step guidance to audit, calibration, scanner balancing, and walk-test results.
+
 ## v1.0.3 - 2026-06-25
 
 - Add runtime `translations/en.json` so Home Assistant displays setup and options flow labels for custom installations.

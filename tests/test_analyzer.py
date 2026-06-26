@@ -6,6 +6,7 @@ from custom_components.bermuda_tuner.analyzer import (
     calibrate_attenuation,
     calibrate_reference_power,
     explain_settings,
+    format_human_result,
     walk_test,
 )
 
@@ -58,5 +59,18 @@ def test_audit_reports_weak_coverage():
 
 def test_settings_explanation_contains_values():
     result = explain_settings({"smoothing_samples": 12, "update_interval": 5})
-    assert "12 readings" in result["smoothing_samples"]
-    assert "5 s" in result["update_interval"]
+    assert "12 readings" in result["Smoothing"]
+    assert "5 seconds" in result["Update speed"]
+
+
+def test_human_formatter_avoids_raw_dictionary_output():
+    result = format_human_result(
+        {
+            "recommended_ref_power": -60,
+            "stable": True,
+            "guidance": "Use this value for Bermuda's ref_power.",
+        }
+    )
+    assert "Recommended ref power: -60" in result
+    assert "Stable: yes" in result
+    assert "{" not in result

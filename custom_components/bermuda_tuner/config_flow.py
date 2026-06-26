@@ -15,6 +15,7 @@ from .analyzer import (
     calibrate_attenuation,
     calibrate_reference_power,
     explain_settings,
+    format_human_result,
     walk_test,
 )
 from .const import BERMUDA_DOMAIN, CONF_AI_ENABLED, CONF_CONVERSATION_AGENT, DOMAIN
@@ -68,7 +69,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
 
     def _result(self, title: str, result: Any):
         self._result_title = title
-        self._result_text = str(result)
+        self._result_text = format_human_result(result)
         return self.async_show_form(
             step_id="result",
             data_schema=vol.Schema({}),
@@ -192,7 +193,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
         return self.async_show_form(
             step_id="confirm_apply",
             data_schema=vol.Schema({vol.Required("confirm", default=False): bool}),
-            description_placeholders={"result": str(changes)},
+            description_placeholders={"result": format_human_result(changes)},
         )
 
     async def async_step_confirm_apply(self, user_input=None):

@@ -4,10 +4,10 @@
     "step": {
       "user": {
         "title": "Set up Bermuda Tuner",
-        "description": "Bermuda Tuner runs deterministic audits and calibration calculations locally. AI is optional and receives only a redacted report through your selected Home Assistant conversation agent.",
+        "description": "This helper reads Bermuda scanner history, explains what looks wrong, and can calculate safer tuning values. Calculations run locally. Optional AI only receives a redacted report through your chosen Home Assistant conversation agent.",
         "data": {
-          "ai_enabled": "Enable optional AI explanations",
-          "conversation_agent": "Conversation agent"
+          "ai_enabled": "Let the selected conversation agent explain redacted reports",
+          "conversation_agent": "Conversation agent to use for optional explanations"
         }
       }
     },
@@ -19,17 +19,18 @@
   "options": {
     "step": {
       "init": {
-        "title": "Bermuda tuning wizard",
+        "title": "What do you want to fix?",
+        "description": "Start with coverage. Then calibrate one scanner at one metre, test the same scanner farther away, and only then balance multiple scanners.",
         "menu_options": {
-          "audit": "Setup audit",
-          "one_meter": "One-metre calibration",
-          "distance": "Distance calibration",
-          "balance": "Scanner balancing",
-          "walk_test": "Walk test",
-          "explain": "Explain settings",
-          "apply": "Preview and apply",
-          "rollback": "Roll back",
-          "ai": "AI options"
+          "audit": "Check scanner coverage first",
+          "one_meter": "Find the one-metre signal value",
+          "distance": "Tune distance using a measured test",
+          "balance": "Balance scanners against each other",
+          "walk_test": "Check which scanner wins here",
+          "explain": "Explain the current Bermuda settings",
+          "apply": "Advanced: paste exact Bermuda settings",
+          "rollback": "Undo the last settings change",
+          "ai": "Optional AI explanation settings"
         }
       },
       "result": {
@@ -37,71 +38,73 @@
         "description": "{result}"
       },
       "audit": {
-        "title": "Setup audit"
+        "title": "Check scanner coverage first",
+        "description": "This reads Bermuda history and looks for missing scanner overlap, stale scanner relationships, and unstable signal history. No settings are changed."
       },
       "one_meter": {
-        "title": "One-metre calibration",
-        "description": "Place the beacon exactly one metre from the scanner and keep both still.",
+        "title": "Find the one-metre signal value",
+        "description": "Put one beacon exactly one metre from one scanner. Keep both still for at least 30 seconds, then submit. The result is the value to consider for Bermuda ref_power.",
         "data": {
-          "device_address": "Bermuda device address",
-          "scanner": "Scanner name or label"
+          "device_address": "Beacon address or name filter, optional",
+          "scanner": "Scanner name filter, optional"
         }
       },
       "distance": {
-        "title": "Distance calibration",
-        "description": "Move the same beacon to a measured distance beyond one metre; 4-6 m is recommended.",
+        "title": "Tune distance using a measured test",
+        "description": "Use the same beacon and scanner from the one-metre test. Move the beacon to a measured distance, usually 4 to 6 metres, keep it still, then submit. This estimates Bermuda attenuation.",
         "data": {
-          "device_address": "Bermuda device address",
-          "scanner": "Scanner name or label",
-          "measured_distance": "Measured distance (m)",
-          "reference_power": "Reference power from the one-metre test"
+          "device_address": "Beacon address or name filter, optional",
+          "scanner": "Scanner name filter, optional",
+          "measured_distance": "Actual distance from scanner in metres",
+          "reference_power": "One-metre signal value from the previous step"
         }
       },
       "balance": {
-        "title": "Scanner balancing",
-        "description": "Keep one beacon stationary where several scanners can hear it.",
+        "title": "Balance scanners against each other",
+        "description": "Use this after basic distance tuning. Put one beacon where several scanners can hear it and keep it still. The result suggests per-scanner rssi_offsets so loud and quiet scanners compare more fairly.",
         "data": {
-          "device_address": "Bermuda device address"
+          "device_address": "Beacon address or name filter, optional"
         }
       },
       "walk_test": {
-        "title": "Walk test",
-        "description": "Walk to a test point, pause, then submit to compare the strongest scanners.",
+        "title": "Check which scanner wins here",
+        "description": "Stand at a real-world test point, wait for readings to settle, then submit. The result shows the strongest scanner, runner-up, and whether the margin is too close to trust.",
         "data": {
-          "device_address": "Bermuda device address",
-          "ambiguity_db": "Ambiguity threshold (dB)"
+          "device_address": "Beacon address or name filter, optional",
+          "ambiguity_db": "How close is too close, in dB"
         }
       },
       "explain": {
-        "title": "Plain-English settings"
+        "title": "Explain the current Bermuda settings",
+        "description": "Shows what the current smoothing, velocity, radius, update interval, and away timeout mean in normal language."
       },
       "apply": {
-        "title": "Preview settings",
-        "description": "Enter only documented Bermuda tuning keys. Nothing changes until the next confirmation screen.",
+        "title": "Advanced: paste exact Bermuda settings",
+        "description": "This is for manual changes only. Paste an object with documented Bermuda option names, such as ref_power, attenuation, rssi_offsets, smoothing_samples, max_velocity, max_area_radius, update_interval, or devtracker_nothome_timeout. Nothing is applied until the confirmation screen.",
         "data": {
-          "settings": "Settings"
+          "settings": "Exact Bermuda settings object"
         }
       },
       "confirm_apply": {
-        "title": "Confirm settings",
-        "description": "Review these changes. A rollback snapshot will be saved before applying: {result}",
+        "title": "Confirm advanced settings change",
+        "description": "Review these changes. Bermuda Tuner saves a rollback snapshot before applying them.\n\n{result}",
         "data": {
-          "confirm": "Apply these changes"
+          "confirm": "Apply these settings now"
         }
       },
       "rollback": {
-        "title": "Roll back Bermuda settings",
-        "description": "Restore the latest snapshot saved by Bermuda Tuner.",
+        "title": "Undo the last settings change",
+        "description": "Restore the latest Bermuda settings snapshot saved by Bermuda Tuner. This only affects changes applied through this tuner.",
         "data": {
-          "confirm": "Restore the snapshot"
+          "confirm": "Restore the saved snapshot"
         }
       },
       "ai": {
-        "title": "AI explanations",
-        "description": "Calculations always remain deterministic. When enabled, Ask AI sends only a redacted audit to the selected Home Assistant conversation agent. The tuner stores no AI transcript, but the provider's own privacy policy still applies.",
+        "title": "Optional AI explanation settings",
+        "description": "Calculations always remain deterministic. When enabled, Ask AI sends only a redacted audit to the selected Home Assistant conversation agent. The tuner stores no AI transcript, but the provider privacy policy still applies.",
         "data": {
-          "ai_enabled": "Enable AI explanations",
-          "conversation_agent": "Conversation agent"
+          "ai_enabled": "Enable optional AI explanations",
+          "conversation_agent": "Conversation agent to use"
         }
       }
     }
