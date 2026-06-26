@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.1 - 2026-06-25
+
+- Fix the HACS release archive layout so files install directly into `custom_components/bermuda_tuner`.
+- Store initial AI setup choices without the newer config-flow `options=` argument.
+- Add a conversation-agent selector fallback for older Home Assistant selector builds.
+
 ## v1.0.0 - 2026-06-21
 
 - Add setup and coverage audits from redacted Bermuda observations.

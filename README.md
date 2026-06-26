@@ -29,7 +29,7 @@ Home Assistant Conversation agent selected by the user.
 
 ## Requirements
 
-- Home Assistant 2025.1 or newer
+- Home Assistant 2024.6 or newer
 - Bermuda installed and configured
 - HACS for the recommended installation method
 

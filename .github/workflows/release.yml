@@ -13,7 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Package integration
-        run: zip -r bermuda_tuner.zip custom_components/bermuda_tuner
+        working-directory: custom_components/bermuda_tuner
+        run: zip -r ../../bermuda_tuner.zip . -x "*/__pycache__/*" "*.pyc"
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true

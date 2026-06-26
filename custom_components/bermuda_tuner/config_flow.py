@@ -21,6 +21,13 @@ from .const import BERMUDA_DOMAIN, CONF_AI_ENABLED, CONF_CONVERSATION_AGENT, DOM
 from .manager import TunerManager
 
 
+def _conversation_agent_selector():
+    """Return a conversation agent selector, with a string fallback for older HA builds."""
+    if hasattr(selector, "ConversationAgentSelector"):
+        return selector.ConversationAgentSelector()
+    return selector.TextSelector()
+
+
 class BermudaTunerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Set up one Bermuda Tuner instance."""
 
@@ -33,11 +40,11 @@ class BermudaTunerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if not self.hass.config_entries.async_entries(BERMUDA_DOMAIN):
             return self.async_abort(reason="bermuda_required")
         if user_input is not None:
-            return self.async_create_entry(title="Bermuda Tuner", data={}, options=user_input)
+            return self.async_create_entry(title="Bermuda Tuner", data=user_input)
         schema = vol.Schema(
             {
                 vol.Optional(CONF_AI_ENABLED, default=False): bool,
-                vol.Optional(CONF_CONVERSATION_AGENT): selector.ConversationAgentSelector(),
+                vol.Optional(CONF_CONVERSATION_AGENT): _conversation_agent_selector(),
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema)
@@ -216,7 +223,7 @@ class BermudaTunerOptionsFlow(config_entries.OptionsFlow):
                     vol.Optional(
                         CONF_CONVERSATION_AGENT,
                         default=current.get(CONF_CONVERSATION_AGENT),
-                    ): selector.ConversationAgentSelector(),
+                    ): _conversation_agent_selector(),
                 }
             ),
         )
