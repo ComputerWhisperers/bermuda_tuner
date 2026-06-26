@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.3 - 2026-06-25
+
+- Add runtime `translations/en.json` so Home Assistant displays setup and options flow labels for custom installations.
+
 ## v1.0.2 - 2026-06-25
 
 - Fix config-flow loading by removing a bad `ServiceResponse` import from `homeassistant.const`.

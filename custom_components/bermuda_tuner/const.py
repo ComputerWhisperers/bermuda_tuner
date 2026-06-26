@@ -2,7 +2,7 @@
 
 DOMAIN = "bermuda_tuner"
 BERMUDA_DOMAIN = "bermuda"
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 
 CONF_CONVERSATION_AGENT = "conversation_agent"
 CONF_AI_ENABLED = "ai_enabled"
